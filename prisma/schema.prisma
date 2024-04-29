@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id         Int          @id @default(autoincrement())
+  label      String       @unique
+  Restaurant Restaurant[]
+}
+
+model Neighbourhood {
+  id         Int          @id @default(autoincrement())
+  area       String       @unique
+  lat        Float
+  long       Float
+  Restaurant Restaurant[]
+}
+
+model Restaurant {
+  id              Int           @id @default(autoincrement())
+  name            String
+  lat             Float
+  long            Float
+  categoryId      Int
+  neighbourhoodId Int
+  category        Category      @relation(fields: [categoryId], references: [id])
+  neighbourhood   Neighbourhood @relation(fields: [neighbourhoodId], references: [id])
+}
